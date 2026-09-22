@@ -1,1 +1,0 @@
-/*FICHA DE UN PRODUCTO*/
