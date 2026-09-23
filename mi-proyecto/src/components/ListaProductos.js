@@ -26,14 +26,14 @@ class ListaProductos extends LitElement {
         title: "Placa de Video RTX 3080 ti",
         price: 899999,
         category_id: 2,
-        image: "/imagenes/rtx-3080-ti.jpg"
+        image: "/imagenes/rtx 3080-ti.jpg"
       },
       {
         id: 3,
         title: "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz",
         price: 369999,
         category_id: 1,
-        image: "/imagenes/procesador-ram.jpg"
+        image: "/imagenes/i5 12400f.jpg"
       },
       {
         id: 4,
