@@ -1,14 +1,15 @@
 import "../components/header.js";
 import "../components/Navbar.js";
 import "../components/Categorias.js";
+import "../components/ListaProductos.js";
+const app = document.querySelector("#app");
 
 console.log("home.js funciona");
-
-const app = document.querySelector("#app");
 
 app.innerHTML = `
 <ultratech-header></ultratech-header>
 <ultratech-navbar></ultratech-navbar>
+<ultratech-lista-productos></ultratech-lista-productos>
 <main>
     <section class="max-w-7xl mx-auto px-4 py-12">
       <h1 class="text-3xl md:text-4xl font-bold text-white">
