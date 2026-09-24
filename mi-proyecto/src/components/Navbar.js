@@ -1,7 +1,6 @@
 import { LitElement, html } from "lit";
 
 class Navbar extends LitElement {
-
   createRenderRoot() {
     return this;
   }
@@ -9,11 +8,8 @@ class Navbar extends LitElement {
   render() {
     return html`
       <nav class="bg-zinc-950 border-b border-zinc-800">
-
         <div class="max-w-7xl mx-auto px-4">
-
           <div class="flex items-center gap-6 overflow-x-auto py-3">
-
             <a
               href="index.html"
               class="text-white font-semibold hover:text-green-500 whitespace-nowrap"
@@ -62,11 +58,14 @@ class Navbar extends LitElement {
             >
               Fuentes
             </a>
-
+            <a
+              href="listado.html?categoria=7"
+              class="text-zinc-400 hover:text-green-500 whitespace-nowrap"
+            >
+              Gabinetes
+            </a>
           </div>
-
         </div>
-
       </nav>
     `;
   }

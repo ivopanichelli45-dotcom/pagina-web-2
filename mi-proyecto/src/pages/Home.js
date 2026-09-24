@@ -2,6 +2,9 @@ import "../components/header.js";
 import "../components/Navbar.js";
 import "../components/Categorias.js";
 import "../components/ListaProductos.js";
+import "../components/Hero.js";
+import "../components/Footer.js";
+
 const app = document.querySelector("#app");
 
 console.log("home.js funciona");
@@ -9,7 +12,8 @@ console.log("home.js funciona");
 app.innerHTML = `
 <ultratech-header></ultratech-header>
 <ultratech-navbar></ultratech-navbar>
-<ultratech-lista-productos></ultratech-lista-productos>
+<ultratech-hero></ultratech-hero>
+
 <main>
     <section class="max-w-7xl mx-auto px-4 py-12">
       <h1 class="text-3xl md:text-4xl font-bold text-white">
@@ -22,5 +26,7 @@ app.innerHTML = `
     </section>
 
     <ultratech-categorias></ultratech-categorias>
+    <ultratech-lista-productos></ultratech-lista-productos>
   </main>
+  <ultratech-footer></ultratech-footer>
 `;

@@ -20,7 +20,8 @@ class Categorias extends LitElement {
       { id: 3, nombre: "Memorias RAM" },
       { id: 4, nombre: "Motherboards" },
       { id: 5, nombre: "Almacenamiento" },
-      { id: 6, nombre: "Fuentes" }
+      { id: 6, nombre: "Fuentes" },
+      { id: 7, nombre: "Gabinetes" }
     ];
   }
 
