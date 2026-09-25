@@ -1,3 +1,4 @@
+import { obtenerProductos } from "../services/api.js";
 import "../components/header.js";
 import "../components/Navbar.js";
 
@@ -5,10 +6,11 @@ const app = document.querySelector("#app");
 
 const params = new URLSearchParams(window.location.search);
 const categoria = Number(params.get("categoria"));
+const busqueda = params.get("buscar") || "";
 
 console.log("Categoría seleccionada:", categoria);
 
-const productos = [
+const productosLocales = [
   {
     id: 1,
     title: "Placa de Video RTX 4080 super",
@@ -150,10 +152,25 @@ const productos = [
 
 
 ];
+function mostrarProductos(productos) {
 
-const productosFiltrados = productos.filter(
-  producto => producto.category_id === categoria
-);
+let productosFiltrados = productos;
+
+if (busqueda !== "") {
+
+  const textoBusqueda = busqueda.toLowerCase();
+
+  productosFiltrados = productos.filter(producto =>
+    producto.title.toLowerCase().includes(textoBusqueda)
+  );
+
+} else if (categoria) {
+
+  productosFiltrados = productos.filter(
+    producto => producto.category_id === categoria
+  );
+
+}
 
 app.innerHTML = `
   <ultratech-header></ultratech-header>
@@ -163,8 +180,8 @@ app.innerHTML = `
   <main class="max-w-7xl mx-auto px-4 py-10">
 
     <h1 class="text-3xl font-bold text-white mb-8">
-      Productos
-    </h1>
+  ${busqueda !== "" ? `Resultados para: "${busqueda}"` : "Productos"}
+  </h1>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
@@ -205,3 +222,21 @@ app.innerHTML = `
 
   </main>
 `;
+}
+obtenerProductos()
+  .then(productosAPI => {
+
+    console.log("Productos recibidos de la API:", productosAPI);
+
+    const productos = productosAPI.length > 0
+      ? productosAPI
+      : productosLocales;
+
+    mostrarProductos(productos);
+  })
+  .catch(error => {
+
+    console.error("Error con la API:", error);
+
+    mostrarProductos(productosLocales);
+  });
