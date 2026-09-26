@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit";
+import { agregarAlCarrito } from "../utils/Carrito.js";
 
 class ListaProductos extends LitElement {
 
@@ -65,6 +66,9 @@ class ListaProductos extends LitElement {
       }
     ];
   }
+    agregarProducto(producto) {
+    agregarAlCarrito(producto);
+}
 
   render() {
     return html`
@@ -105,6 +109,12 @@ class ListaProductos extends LitElement {
                 >
                   Ver producto
                 </a>
+                <button
+                  @click=${() => this.agregarProducto(producto)}
+                    class="w-full mt-2 bg-zinc-800 hover:bg-zinc-700 text-green-500 border border-zinc-700 font-semibold py-2 rounded-lg transition"
+>
+  Agregar al carrito
+</button>
 
               </div>
 

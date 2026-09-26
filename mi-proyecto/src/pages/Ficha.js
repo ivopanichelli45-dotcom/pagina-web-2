@@ -248,7 +248,7 @@ if (!producto) {
              id="btn-agregar"
              class="mt-8 w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-3 rounded-lg"
            >
-             🛒 Agregar al carrito
+              Agregar al carrito
           </button>
 
         </div>

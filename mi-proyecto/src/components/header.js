@@ -2,20 +2,91 @@ import { LitElement, html } from "lit";
 import {
   actualizarContadorCarrito,
   obtenerCarrito,
+  obtenerCantidadTotal,
   obtenerPrecioTotal,
   quitarDelCarrito,
   vaciarCarrito
+
 } from "../utils/Carrito.js";
 
 class Header extends LitElement {
   createRenderRoot() {
     return this;
   }
+  toggleCarrito() {
+    const carrito = document.getElementById("panel-carrito");
+
+    if (carrito) {
+      carrito.classList.toggle("hidden");
+      this.actualizarPanelCarrito();
+    }
+  }
+  actualizarPanelCarrito() {
+    const lista = document.getElementById("lista-carrito");
+    const cantidad = document.getElementById("cantidad-total-carrito");
+    const precio = document.getElementById("precio-total-carrito");
+
+    if (!lista) return;
+
+    const carrito = obtenerCarrito();
+
+    cantidad.textContent = obtenerCantidadTotal();
+    precio.textContent = obtenerPrecioTotal().toLocaleString("es-AR");
+
+    if (carrito.length === 0) {
+      lista.innerHTML = `
+      <p class="text-zinc-500 text-sm">
+        El carrito está vacío.
+      </p>
+    `;
+      return;
+    }
+
+    lista.innerHTML = carrito
+      .map(
+        (producto) => `
+    <div class="border-b border-zinc-700 pb-3">
+      <p class="text-white font-semibold text-sm">
+        ${producto.title}
+      </p>
+
+      <p class="text-zinc-400 text-sm">
+        Cantidad: ${producto.cantidad}
+      </p>
+
+      <p class="text-green-500 text-sm font-semibold">
+        $${(producto.price * producto.cantidad).toLocaleString("es-AR")}
+      </p>
+    </div>
+  `,
+      )
+      .join("");
+  }
 
   firstUpdated() {
     actualizarContadorCarrito();
-  }
+    this.actualizarPanelCarrito();
 
+    const botonVaciar = document.getElementById("vaciar-carrito");
+
+    if (botonVaciar) {
+      botonVaciar.addEventListener("click", () => {
+        vaciarCarrito();
+
+        const cantidad = document.getElementById("cantidad-total-carrito");
+        const precio = document.getElementById("precio-total-carrito");
+
+        if (cantidad) {
+          cantidad.textContent = obtenerCantidadTotal();
+        }
+
+        if (precio) {
+          precio.textContent = obtenerPrecioTotal().toLocaleString("es-AR");
+        }
+        this.actualizarPanelCarrito();
+      });
+    }
+  }
   buscarProducto(event) {
     if (event.key === "Enter") {
       const texto = event.target.value.trim();
@@ -85,14 +156,14 @@ abrirCarrito() {
       <div class="flex justify-between items-center mb-6">
 
         <h2 class="text-2xl font-bold text-white">
-          🛒 Mi carrito
+            Mi carrito
         </h2>
 
         <button
           id="cerrar-carrito"
           class="text-zinc-400 hover:text-white text-2xl"
         >
-          ×
+          ✕
         </button>
 
       </div>
@@ -184,13 +255,13 @@ abrirCarrito() {
 
             <!-- Cuenta y carrito -->
 
-            <div class="flex items-center gap-3 mt-5 lg:mt-0">
+            <div class="relative flex items-center gap-3 mt-5 lg:mt-0">
               <button class="text-zinc-300 hover:text-green-500">
                 Mi cuenta
               </button>
 
               <button
-                @click=${this.abrirCarrito}
+                @click=${this.toggleCarrito}
                 class="relative bg-zinc-900 border border-zinc-700 hover:border-green-500 rounded-lg p-3"
               >
                 🛒 Carrito
@@ -202,6 +273,40 @@ abrirCarrito() {
                   0
                 </span>
               </button>
+               <!-- PANEL DEL CARRITO -->
+  <div
+    id="panel-carrito"
+    class="hidden absolute right-0 top-14 w-80 bg-zinc-900 border border-zinc-700 rounded-xl p-5 z-50"
+  >
+    <h2 class="text-xl font-bold text-white mb-4">
+      Carrito
+    </h2>
+
+    <p class="text-zinc-400">
+      Productos:
+      <span id="cantidad-total-carrito">0</span>
+    </p>
+
+    <p class="text-green-500 font-bold mt-2">
+      Total:
+      $<span id="precio-total-carrito">0</span>
+    </p>
+    
+    <div id="lista-carrito" class="mt-4 space-y-3">
+  <p class="text-zinc-500 text-sm">
+    El carrito está vacío.
+  </p>
+</div>
+
+    <button
+      id="vaciar-carrito"
+      class="w-full mt-5 bg-red-600 hover:bg-red-500 text-white font-semibold py-2 rounded-lg"
+    >
+      Vaciar carrito
+    </button>
+  </div>
+
+</div>
             </div>
           </div>
         </div>
