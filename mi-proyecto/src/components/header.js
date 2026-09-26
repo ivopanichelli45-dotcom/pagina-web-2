@@ -26,15 +26,18 @@ class Header extends LitElement {
     return html`
       <header class="bg-black border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-4 py-5">
-          <div class="flex flex-col lg:flex-row items-center gap-5">
+          <div class="flex flex-col lg:flex-row items-center gap-7">
             <!-- Logo -->
 
-            <div class="flex items-center gap-3">
-              <div
-                class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center"
-              >
-                <span class="text-black font-black text-2xl"></span>
-              </div>
+            <div
+               class="w-12 h-12 bg-green-950 rounded-lg flex items-center justify-center overflow-hidden"
+           >
+             <img
+               src="/imagenes/logoultra.png"
+               alt="UltraTech"
+               class="w-full h-full object-contain"
+           >
+            </div>
 
               <div>
                 <h1 class="text-3xl font-black text-white">
@@ -47,7 +50,7 @@ class Header extends LitElement {
 
             <!-- Buscador -->
 
-            <div class="flex-1 w-full max-w-2xl">
+            <div class="flex-1 w-full max-w-2xl mt-6 lg:mt-0">
               <input
                 type="text"
                 placeholder="Buscar productos..."
@@ -58,7 +61,7 @@ class Header extends LitElement {
 
             <!-- Cuenta y carrito -->
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 mt-5 lg:mt-0">
               <button class="text-zinc-300 hover:text-green-500">
                 Mi cuenta
               </button>
