@@ -1,5 +1,6 @@
 import "../components/header.js";
 import "../components/Navbar.js";
+import { agregarAlCarrito } from "../utils/Carrito.js";
 
 const app = document.querySelector("#app");
 
@@ -167,6 +168,20 @@ const producto = productos.find(
   producto => producto.id === productoId
 );
 
+function agregarProducto() {
+  agregarAlCarrito(producto);
+
+  const mensaje = document.querySelector("#mensaje-carrito");
+
+  mensaje.textContent = "✓ Producto agregado al carrito";
+  mensaje.classList.remove("hidden");
+
+  setTimeout(() => {
+    mensaje.classList.add("hidden");
+  }, 2000);
+
+}
+
 if (!producto) {
 
   app.innerHTML = `
@@ -222,10 +237,18 @@ if (!producto) {
             ${producto.description}
           </p>
 
-          <button
-            class="mt-8 w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-3 rounded-lg"
+          <div
+            id="mensaje-carrito"
+            class="hidden mt-4 text-green-400 text-sm font-semibold text-center"
           >
-            Agregar al carrito
+            ✓ Producto agregado al carrito
+          </div>
+
+          <button
+             id="btn-agregar"
+             class="mt-8 w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-3 rounded-lg"
+           >
+             🛒 Agregar al carrito
           </button>
 
         </div>
@@ -234,4 +257,8 @@ if (!producto) {
 
     </main>
   `;
+
+  document
+   .querySelector("#btn-agregar")
+   .addEventListener("click", agregarProducto);
 }
