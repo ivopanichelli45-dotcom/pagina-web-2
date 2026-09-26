@@ -33,7 +33,7 @@ class ListaProductos extends LitElement {
         title: "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz",
         price: 369999,
         category_id: 1,
-        image: "/imagenes/i5 12400f.jpg"
+        image: "/imagenes/combointel.jpg"
       },
       {
         id: 4,
