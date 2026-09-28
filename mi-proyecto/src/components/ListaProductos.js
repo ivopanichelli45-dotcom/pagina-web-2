@@ -1,5 +1,4 @@
 import { LitElement, html } from "lit";
-<<<<<<< HEAD
 import { obtenerProductos } from "../services/api.js";
 
 const imagenesProductos = {
@@ -29,9 +28,9 @@ const imagenesProductos = {
   "Memoria Ram Star 16gb 3200mhz Ddr4": "/imagenes/Memoria Ram Star 16gb 3200mhz Ddr4.webp",
   "Memoria Ram Ddr4 32gb 3200mhz Hiksemi Future U-dimm Rgb": "/imagenes/Memoria Ram Ddr4 32gb 3200mhz Hiksemi Future U-dimm Rgb.webp"
 };
-=======
+
 import { agregarAlCarrito } from "../utils/Carrito.js";
->>>>>>> 95d19fc71822c9eb87a8fb465a9f37e0cebb7ecc
+
 
 class ListaProductos extends LitElement {
 
@@ -57,11 +56,9 @@ async cargarProductos() {
   } catch (error) {
     console.error("Error al cargar productos:", error);
   }
-<<<<<<< HEAD
-=======
+  }
     agregarProducto(producto) {
     agregarAlCarrito(producto);
->>>>>>> 95d19fc71822c9eb87a8fb465a9f37e0cebb7ecc
 }
 
   render() {
