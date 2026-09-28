@@ -6,6 +6,40 @@ class Hero extends LitElement {
     return this;
   }
 
+  cambiarImagen(direccion) {
+
+  const imagenes = [
+    "/imagenes/promocion1.jpg",
+    "/imagenes/promocion2.jpg",
+    "/imagenes/promocion3.jpg"
+  ];
+
+  const imagen = this.querySelector("#imagen-promocion");
+
+  let actual = Number(imagen.dataset.indice || 0);
+
+  actual += direccion;
+
+  if (actual < 0) {
+    actual = imagenes.length - 1;
+  }
+
+  if (actual >= imagenes.length) {
+    actual = 0;
+  }
+
+  imagen.classList.add("opacity-0"); 
+
+  setTimeout(() => {
+
+    imagen.src = imagenes[actual];
+    imagen.dataset.indice = actual;
+
+    imagen.classList.remove("opacity-0");
+
+  }, 250);
+}
+
   render() {
     return html`
       <section class="bg-zinc-900 border-b border-zinc-800">
@@ -36,6 +70,30 @@ class Hero extends LitElement {
           </div>
 
         </div>
+        
+        <div class="relative w-full max-w-xl overflow-hidden rounded-xl">
+
+  <img
+    id="imagen-promocion"
+    src="/imagenes/promocion1.jpg"
+    class="w-full h-80 object-cover transition-all duration-500"
+  >
+
+ <button
+  @click=${() => this.cambiarImagen(-1)}
+  class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/70 text-white w-10 h-10 rounded-full hover:bg-green-500"
+>
+  ⇇
+</button>
+
+ <button
+  @click=${() => this.cambiarImagen(1)}
+  class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/70 text-white w-10 h-10 rounded-full hover:bg-green-500"
+>
+  ⇉
+</button>
+
+</div>
       </section>
     `;
   }

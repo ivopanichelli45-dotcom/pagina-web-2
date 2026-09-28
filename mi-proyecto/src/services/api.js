@@ -12,5 +12,6 @@ export async function obtenerProductos() {
 
   const productos = await respuesta.json();
 
+  console.log("RESPUESTA COMPLETA DE LA API:", productos);
   return productos;
 }

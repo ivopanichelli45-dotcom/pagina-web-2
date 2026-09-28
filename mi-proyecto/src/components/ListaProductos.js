@@ -1,4 +1,33 @@
 import { LitElement, html } from "lit";
+import { obtenerProductos } from "../services/api.js";
+
+const imagenesProductos = {
+  "Placa de Video RTX 4080 Super": "/imagenes/rtx-4080-super.jpg",
+  "Placa de Video RTX 3080 ti": "/imagenes/rtx 3080-ti.jpg",
+
+  "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz": "/imagenes/i5 12400f.jpg",
+  "Procesador AMD Ryzen 5 7600X 5.3GHz AM5": "/imagenes/Procesador AMD Ryzen 5 7600X 5.3GHz AM5.webp",
+  "Procesador AMD Ryzen 7 7700X 5.4GHz Turbo AM5": "/imagenes/Procesador AMD Ryzen 7 7700X 5.4GHz Turbo AM5.webp",
+  "Procesador AMD Ryzen 9 7900X 5.6GHz Turbo AM5": "/imagenes/Procesador AMD Ryzen 9 7900X 5.6GHz Turbo AM5.webp",
+
+  "Placa Madre Z590 asus Tuf gaming": "/imagenes/Placa Madre Z590 asus Tuf gaming.jpg",
+  "Placa Madre Z760 tuf gaming": "/imagenes/Placa Madre Z760 tuf gaming.jpg",
+
+  "SSD M.2 NVMe 1TB": "/imagenes/SSD M.2 NVMe 1TB.webp",
+  "SSD M.2 NVMe 2TB": "/imagenes/SSD M.2 NVMe 2TB.webp",
+
+  "Gabinete Gamer Brainstorm Spark Acrilico": "/imagenes/Gabinete Gamer Brainstorm Spark Acrilico.webp",
+  "Gabinete PC Gamer Sentey K20 Super 4 Fan Rgb Vidrio Templado": "/imagenes/Gabinete Pc Gamer Sentey K20 Super 4 Fan Rgb Vidrio Templado.webp",
+  "Gabinete Raidmax I600 Infinita Fishtank Gamer Vidrio Templado": "/imagenes/Gabinete Raidmax I600 Infinita Fishtank Gamer Vidrio Templado.webp",
+
+  "Fuente Alimentacion Corsair 750w 80 Plus Gold Rmx 140mm": "/imagenes/Fuente Alimentacion Corsair 750w 80 Plus Gold Rmx 140mm.webp",
+  "Fuente de alimentación MSI MPG A850GS PCIE5 80+ dorado ATX 3.1 y PCIe 5.1 850W": "/imagenes/Fuente de alimentación MSI MPG A850GS PCIE5 80+ dorado ATX 3.1 y PCIe 5.1 850W.webp",
+  "Fuente de Alimentación Thermaltake Toughpower 650W 80 Gold": "/imagenes/Fuente de Alimentación Thermaltake Toughpower 650W 80 Gold.webp",
+
+  "Memoria RAM Patriot Signature Line 8GB DDR4 3200MHz CL22": "/imagenes/Memoria RAM Patriot Signature Line 8GB DDR4 3200MHz CL22.webp",
+  "Memoria Ram Star 16gb 3200mhz Ddr4": "/imagenes/Memoria Ram Star 16gb 3200mhz Ddr4.webp",
+  "Memoria Ram Ddr4 32gb 3200mhz Hiksemi Future U-dimm Rgb": "/imagenes/Memoria Ram Ddr4 32gb 3200mhz Hiksemi Future U-dimm Rgb.webp"
+};
 
 class ListaProductos extends LitElement {
 
@@ -10,61 +39,21 @@ class ListaProductos extends LitElement {
     productos: { type: Array }
   };
 
-  constructor() {
-    super();
+constructor() {
+  super();
 
-    this.productos = [
-      {
-        id: 1,
-        title: "Placa de Video RTX 4080 super",
-        price: 1345000,
-        category_id: 2,
-        image: "/imagenes/rtx-4080-super.jpg"
-      },
-      {
-        id: 2,
-        title: "Placa de Video RTX 3080 ti",
-        price: 899999,
-        category_id: 2,
-        image: "/imagenes/rtx 3080-ti.jpg"
-      },
-      {
-        id: 3,
-        title: "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz",
-        price: 369999,
-        category_id: 1,
-        image: "/imagenes/combointel.jpg"
-      },
-      {
-        id: 4,
-        title: "Procesador I5 11400 con placa madre Z590 asus",
-        price: 659999,
-        category_id: 4,
-        image: "/imagenes/I5 11400-Z590.jpg"
-      },
-      {
-        id: 5,
-        title: "Procesador I7 14600K con placa madre Z760 tuf gaming",
-        price: 679999,
-        category_id: 4,
-        image: "/imagenes/I7 14600K-Z760.jpg"
-      },
-      {
-        id: 6,
-        title: "SSD M.2 NVMe 1TB",
-        price: 79999,
-        category_id: 5,
-        image: "/imagenes/SSD M.2 NVMe 1TB.webp"
-      },
-      {
-        id: 7,
-        title: "SSD M.2 NVMe 2TB",
-        price: 129999,
-        category_id: 5,
-        image: "/imagenes/SSD M.2 NVMe 2TB.webp"
-      }
-    ];
+  this.productos = [];
+  console.log("TITULOS:", this.productos);
+  this.cargarProductos();
+}
+
+async cargarProductos() {
+  try {
+    this.productos = await obtenerProductos();
+  } catch (error) {
+    console.error("Error al cargar productos:", error);
   }
+}
 
   render() {
     return html`
@@ -83,7 +72,7 @@ class ListaProductos extends LitElement {
 
               <div class="bg-white h-52 flex items-center justify-center p-4">
                 <img
-                  src="${producto.image}"
+                  src="${imagenesProductos[producto.title] || "/imagenes/combointel.jpg"}"
                   alt="${producto.title}"
                   class="max-h-full max-w-full object-contain"
                 >

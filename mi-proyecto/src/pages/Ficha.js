@@ -1,6 +1,35 @@
 import "../components/header.js";
 import "../components/Navbar.js";
 import { agregarAlCarrito } from "../utils/Carrito.js";
+import { obtenerProductos } from "../services/api.js";
+
+const imagenesProductos = {
+  "Placa de Video RTX 4080 Super": "/imagenes/rtx-4080-super.jpg",
+  "Placa de Video RTX 3080 ti": "/imagenes/rtx 3080-ti.jpg",
+
+  "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz": "/imagenes/i5 12400f.jpg",
+  "Procesador AMD Ryzen 5 7600X 5.3GHz AM5": "/imagenes/Procesador AMD Ryzen 5 7600X 5.3GHz AM5.webp",
+  "Procesador AMD Ryzen 7 7700X 5.4GHz Turbo AM5": "/imagenes/Procesador AMD Ryzen 7 7700X 5.4GHz Turbo AM5.webp",
+  "Procesador AMD Ryzen 9 7900X 5.6GHz Turbo AM5": "/imagenes/Procesador AMD Ryzen 9 7900X 5.6GHz Turbo AM5.webp",
+
+  "Placa Madre Z590 asus Tuf gaming": "/imagenes/Placa Madre Z590 asus Tuf gaming.jpg",
+  "Placa Madre Z760 tuf gaming": "/imagenes/Placa Madre Z760 tuf gaming.jpg",
+
+  "SSD M.2 NVMe 1TB": "/imagenes/SSD M.2 NVMe 1TB.webp",
+  "SSD M.2 NVMe 2TB": "/imagenes/SSD M.2 NVMe 2TB.webp",
+
+  "Gabinete Gamer Brainstorm Spark Acrilico": "/imagenes/Gabinete Gamer Brainstorm Spark Acrilico.webp",
+  "Gabinete PC Gamer Sentey K20 Super 4 Fan Rgb Vidrio Templado": "/imagenes/Gabinete Pc Gamer Sentey K20 Super 4 Fan Rgb Vidrio Templado.webp",
+  "Gabinete Raidmax I600 Infinita Fishtank Gamer Vidrio Templado": "/imagenes/Gabinete Raidmax I600 Infinita Fishtank Gamer Vidrio Templado.webp",
+
+  "Fuente Alimentacion Corsair 750w 80 Plus Gold Rmx 140mm": "/imagenes/Fuente Alimentacion Corsair 750w 80 Plus Gold Rmx 140mm.webp",
+  "Fuente de alimentación MSI MPG A850GS PCIE5 80+ dorado ATX 3.1 y PCIe 5.1 850W": "/imagenes/Fuente de alimentación MSI MPG A850GS PCIE5 80+ dorado ATX 3.1 y PCIe 5.1 850W.webp",
+  "Fuente de Alimentación Thermaltake Toughpower 650W 80 Gold": "/imagenes/Fuente de Alimentación Thermaltake Toughpower 650W 80 Gold.webp",
+
+  "Memoria RAM Patriot Signature Line 8GB DDR4 3200MHz CL22": "/imagenes/Memoria RAM Patriot Signature Line 8GB DDR4 3200MHz CL22.webp",
+  "Memoria Ram Star 16gb 3200mhz Ddr4": "/imagenes/Memoria Ram Star 16gb 3200mhz Ddr4.webp",
+  "Memoria Ram Ddr4 32gb 3200mhz Hiksemi Future U-dimm Rgb": "/imagenes/Memoria Ram Ddr4 32gb 3200mhz Hiksemi Future U-dimm Rgb.webp"
+};
 
 const app = document.querySelector("#app");
 
@@ -31,7 +60,7 @@ const productos = [
     title: "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz",
     price: 369999,
     category_id: 1,
-    image: "/imagenes/i5 12400f.jpg",
+    image: "/imagenes/combointel.jpg",
     description: "Combo compuesto por un procesador Intel Core i5 y 32 GB de memoria RAM DDR4, ideal para gaming, trabajo y uso general."
   },
   {
@@ -92,10 +121,10 @@ const productos = [
   },
   {
     id: 11,
-    title: "Gabinete Gamer Brainstorm Spark Acrílico",
+    title: "Gabinete Gamer Brainstorm Spark Acrilico",
     price: 459000,
     category_id: 7,
-    image: "/imagenes/Gabinete Gamer Brainstorm Spark Acrílico.webp",
+    image: "/imagenes/Gabinete Gamer Brainstorm Spark Acrilico.webp",
     description: "Gabinete gamer con panel acrílico y diseño pensado para mostrar los componentes internos del equipo."
   },
   {
@@ -164,9 +193,25 @@ const productos = [
   }
 ];
 
-const producto = productos.find(
+let producto = productos.find(
   producto => producto.id === productoId
 );
+
+obtenerProductos()
+  .then(productosAPI => {
+
+    producto = productosAPI.find(
+      producto => producto.id === productoId
+    );
+
+    console.log("Producto encontrado:", producto);
+
+    mostrarProducto();
+
+  })
+  .catch(error => {
+    console.error("Error al obtener producto:", error);
+  });
 
 function agregarProducto() {
   agregarAlCarrito(producto);
@@ -181,6 +226,8 @@ function agregarProducto() {
   }, 2000);
 
 }
+
+function mostrarProducto() {
 
 if (!producto) {
 
@@ -217,7 +264,7 @@ if (!producto) {
 
         <div class="bg-white rounded-xl p-8 flex items-center justify-center">
           <img
-            src="${producto.image}"
+            src="${imagenesProductos[producto.title] || "/imagenes/combointel.jpg"}"
             alt="${producto.title}"
             class="max-h-96 max-w-full object-contain"
           >
@@ -225,7 +272,7 @@ if (!producto) {
 
         <div>
 
-          <h1 class="text-3xl font-bold text-white">
+          <h1 class="text-3xl font-bold text-white"
             ${producto.title}
           </h1>
 
@@ -261,4 +308,6 @@ if (!producto) {
   document
    .querySelector("#btn-agregar")
    .addEventListener("click", agregarProducto);
+}
+
 }

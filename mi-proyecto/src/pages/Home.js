@@ -5,19 +5,10 @@ import "../components/ListaProductos.js";
 import "../components/Hero.js";
 import "../components/Footer.js";
 
-import { obtenerProductos } from "../services/api.js";
 
 const app = document.querySelector("#app");
 
 console.log("home.js funciona");
-obtenerProductos()
-  .then(productos => {
-    console.log("Productos de la API:", productos);
-  })
-  .catch(error => {
-    console.error("Error con la API:", error);
-  });
-
 app.innerHTML = `
 <ultratech-header></ultratech-header>
 <ultratech-navbar></ultratech-navbar>
