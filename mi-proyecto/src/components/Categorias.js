@@ -11,20 +11,6 @@ class Categorias extends LitElement {
     categorias: { type: Array }
   };
 
-  constructor() {
-    super();
-
-    this.categorias = [
-      { id: 1, nombre: "Procesadores" },
-      { id: 2, nombre: "Placas de video" },
-      { id: 3, nombre: "Memorias RAM" },
-      { id: 4, nombre: "Motherboards" },
-      { id: 5, nombre: "Almacenamiento" },
-      { id: 6, nombre: "Fuentes" },
-      { id: 7, nombre: "Gabinetes" }
-    ];
-  }
-
   render() {
     return html`
       <section class="max-w-7xl mx-auto px-4 py-10">

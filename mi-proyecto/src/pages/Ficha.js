@@ -59,7 +59,7 @@ const productos = [
     id: 3,
     title: "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz",
     price: 369999,
-    category_id: 1,
+    category_id: 344,
     image: "/imagenes/combointel.jpg",
     description: "Combo compuesto por un procesador Intel Core i5 y 32 GB de memoria RAM DDR4, ideal para gaming, trabajo y uso general."
   },

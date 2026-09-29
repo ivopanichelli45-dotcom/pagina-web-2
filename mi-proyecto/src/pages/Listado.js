@@ -29,7 +29,7 @@ const productosLocales = [
     id: 3,
     title: "Procesador I5 12400F con Memoria RAM 2x16gb DDR4 3200MHz",
     price: 369999,
-    category_id: 1,
+    category_id: 344,
     image: "/imagenes/i5 12400f.jpg"
   },
   {
@@ -196,8 +196,7 @@ if (busqueda !== "") {
 } else if (categoria) {
 
   productosFiltrados = productos.filter(
-    producto => producto.category_id === categoria ||
-                producto.category_id === 335
+    producto => producto.category_id === categoria
   );
 
 }
@@ -258,6 +257,12 @@ obtenerProductos()
 
     console.log("Productos recibidos de la API:", productosAPI);
     console.log("NOMBRES:", productosAPI.map(p => p.title));
+    console.log("CATEGORIAS:", productosAPI.map(p => ({
+  id: p.id,
+  titulo: p.title,
+  categoria: p.category_id,
+  category: p.category
+})));
 
     const productos = productosAPI.length > 0
       ? productosAPI
