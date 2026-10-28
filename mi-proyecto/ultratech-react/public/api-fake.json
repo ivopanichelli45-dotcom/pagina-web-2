@@ -1,0 +1,54 @@
+
+[
+  {
+    "id": 1,
+    "title": "Placa de video RTX 4080 Super",
+    "description": "Placa de video para gaming de alto rendimiento.",
+    "price": 1345000,
+    "pictures": ["/imagenes/rtx-4080-super.jpg"],
+    "category": {
+      "id": 2,
+      "title": "Placas de video"
+    },
+    "tags": [
+      {
+        "id": 1,
+        "title": "Destacado"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Placa de video RTX 3080 Ti",
+    "description": "Placa de video para gaming.",
+    "price": 899999,
+    "pictures": ["/imagenes/rtx 3080-ti.jpg"],
+    "category": {
+      "id": 2,
+      "title": "Placas de video"
+    },
+    "tags": [
+      {
+        "id": 2,
+        "title": "Promoción"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Procesador AMD Ryzen 5 7600X",
+    "description": "Procesador AMD Ryzen para equipos de escritorio.",
+    "price": 329999,
+    "pictures": ["/imagenes/Procesador AMD Ryzen 5 7600X 5.3GHz AM5.webp"],
+    "category": {
+      "id": 1,
+      "title": "Procesadores"
+    },
+    "tags": [
+      {
+        "id": 1,
+        "title": "Destacado"
+      }
+    ]
+  }
+]
