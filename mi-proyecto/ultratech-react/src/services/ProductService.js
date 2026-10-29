@@ -1,11 +1,35 @@
+
+const CLAVE_PRODUCTOS = "ultratech-productos";
+
 export async function obtenerProductos() {
-  const respuesta = await fetch("/api-fake.json");
+  try {
+    const guardados = localStorage.getItem(CLAVE_PRODUCTOS);
 
-  if (!respuesta.ok) {
-    throw new Error("No se pudieron cargar los productos.");
+    // Si ya hay productos guardados, usamos esos.
+    if (guardados !== null) {
+      return JSON.parse(guardados);
+    }
+
+    // La primera vez, cargamos los productos del JSON.
+    const respuesta = await fetch("/api-fake.json");
+
+    if (!respuesta.ok) {
+      throw new Error("No se pudieron cargar los productos.");
+    }
+
+    const productos = await respuesta.json();
+
+    localStorage.setItem(
+      CLAVE_PRODUCTOS,
+      JSON.stringify(productos)
+    );
+
+    return productos;
+  } catch (error) {
+    throw new Error(
+      error.message || "Ocurrió un error al cargar los productos."
+    );
   }
-
-  return await respuesta.json();
 }
 
 export async function obtenerProducto(id) {
@@ -20,4 +44,11 @@ export async function obtenerProducto(id) {
   }
 
   return producto;
+}
+
+export function guardarProductos(productos) {
+  localStorage.setItem(
+    CLAVE_PRODUCTOS,
+    JSON.stringify(productos)
+  );
 }

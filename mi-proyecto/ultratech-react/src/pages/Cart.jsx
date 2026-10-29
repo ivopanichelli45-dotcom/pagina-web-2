@@ -8,27 +8,32 @@ function Cart() {
     quitarDelCarrito,
     cambiarCantidad,
     vaciarCarrito,
-    cantidadTotal,
-    precioTotal
+    precioTotal,
   } = useCart();
 
-  const formatoPrecio = (precio) =>
-    Number(precio).toLocaleString("es-AR", {
+  function formatoPrecio(precio) {
+    return Number(precio).toLocaleString("es-AR", {
       style: "currency",
       currency: "ARS",
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     });
+  }
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10">
-      <h1 className="mb-8 text-3xl font-bold">Mi carrito</h1>
+    <main className="mx-auto max-w-5xl px-4 py-10">
+      <h1 className="mb-6 text-3xl font-bold">
+        Mi carrito
+      </h1>
 
       {carrito.length === 0 ? (
-        <div>
-          <p className="text-zinc-400">Tu carrito está vacío.</p>
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+          <p className="text-zinc-300">
+            Tu carrito está vacío.
+          </p>
+
           <Link
             to="/productos"
-            className="mt-5 inline-block rounded-lg bg-green-600 px-5 py-3 font-semibold text-white hover:bg-green-500"
+            className="mt-4 inline-block text-green-500 hover:text-green-400"
           >
             Ver productos
           </Link>
@@ -39,89 +44,95 @@ function Cart() {
             {carrito.map((producto) => (
               <article
                 key={producto.id}
-                className="flex flex-col gap-4 rounded-xl border border-zinc-800 bg-zinc-900 p-4 sm:flex-row sm:items-center"
+                className="flex flex-col gap-4 rounded-xl border border-zinc-800 bg-zinc-900 p-4 sm:flex-row sm:items-center sm:justify-between"
               >
-                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg bg-white p-2">
-                  {producto.pictures?.[0] && (
-                    <img
-                      src={producto.pictures[0]}
-                      alt={producto.title}
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  )}
-                </div>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={producto.pictures?.[0]}
+                    alt={producto.title}
+                    className="h-24 w-24 rounded-lg bg-white object-contain p-2"
+                  />
 
-                <div className="flex-1">
-                  <h2 className="font-semibold">{producto.title}</h2>
-                  <p className="mt-1 text-green-500">
-                    {formatoPrecio(producto.price)}
-                  </p>
+                  <div>
+                    <h2 className="font-semibold">
+                      {producto.title}
+                    </h2>
+
+                    <p className="mt-2 text-green-500">
+                      {formatoPrecio(producto.price)}
+                    </p>
+
+                    <p className="mt-1 text-sm text-zinc-400">
+                      Subtotal:{" "}
+                      {formatoPrecio(
+                        producto.price * producto.cantidad
+                      )}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <label
-                    htmlFor={`cantidad-${producto.id}`}
-                    className="text-sm text-zinc-300"
+                  <button
+                    type="button"
+                    onClick={() =>
+                      cambiarCantidad(
+                        producto.id,
+                        producto.cantidad - 1
+                      )
+                    }
+                    disabled={producto.cantidad <= 1}
+                    className="rounded bg-zinc-700 px-3 py-2 disabled:opacity-40"
                   >
-                    Cantidad
-                  </label>
+                    -
+                  </button>
 
-                  <input
-                    id={`cantidad-${producto.id}`}
-                    type="number"
-                    min="1"
-                    value={producto.cantidad}
-                    onChange={(e) => {
-                      const valor = Number(e.target.value);
-                      if (Number.isInteger(valor) && valor >= 1) {
-                        cambiarCantidad(producto.id, valor);
-                      }
-                    }}
-                    className="w-20 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-2"
-                  />
+                  <span>{producto.cantidad}</span>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      cambiarCantidad(
+                        producto.id,
+                        producto.cantidad + 1
+                      )
+                    }
+                    className="rounded bg-zinc-700 px-3 py-2"
+                  >
+                    +
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => quitarDelCarrito(producto.id)}
+                    className="text-red-400 hover:text-red-300"
+                  >
+                    Eliminar
+                  </button>
                 </div>
-
-                <div className="font-semibold">
-                  {formatoPrecio(producto.price * producto.cantidad)}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => quitarDelCarrito(producto.id)}
-                  className="text-left text-red-400 hover:text-red-300"
-                >
-                  Quitar
-                </button>
               </article>
             ))}
           </div>
 
           <div className="mt-8 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="text-zinc-300">
-              Cantidad total de artículos: {cantidadTotal}
-            </p>
-
-            <p className="mt-3 text-2xl font-bold">
+            <p className="text-xl font-bold">
               Total: {formatoPrecio(precioTotal)}
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-4">
               <button
                 type="button"
                 onClick={vaciarCarrito}
-                className="rounded-lg border border-zinc-700 px-5 py-3 hover:bg-zinc-800"
+                className="rounded-lg border border-red-500 px-4 py-2 text-red-400"
               >
                 Vaciar carrito
               </button>
 
-              <button
-                type="button"
-                disabled
-                title="El checkout se implementará más adelante."
-                className="cursor-not-allowed rounded-lg bg-zinc-700 px-5 py-3 font-semibold text-zinc-300"
+              <Link
+                to="/productos"
+                className="rounded-lg bg-green-600 px-4 py-2 font-semibold text-white hover:bg-green-500"
               >
-                Continuar compra (próximamente)
-              </button>
+                Seguir comprando
+              </Link>
             </div>
           </div>
         </>
