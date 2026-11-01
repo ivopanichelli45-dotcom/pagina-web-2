@@ -24,11 +24,11 @@ function Home() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10">
-      <section className="rounded-2xl border border-zinc-800 bg-zinc-900 px-6 py-12 md:px-10">
+    <main className="mx-auto w-full max-w-7x1 px-3 py-6 sm:px-4 sm:py-10">
+      <section className="w-full min-w-0 rounded-2xl border border-zinc-800 bg-zinc-900 px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12">
         <p className="font-semibold text-green-500">ULTRATECH</p>
 
-        <h1 className="mt-3 text-3xl font-bold md:text-5xl">
+        <h1 className="mt-3 break-words text-2xl font-bold leading-tight sm:text-3xl md:text-5xl">
           Hardware para llevar tu PC al siguiente nivel
         </h1>
 
@@ -45,7 +45,7 @@ function Home() {
         </Link>
       </section>
 
-      <section className="py-10">
+      <section className="w-full min-w-0 py-8 sm:py-10">
         <h2 className="mb-6 text-2xl font-bold">Productos destacados</h2>
 
         {cargando && <p className="text-zinc-400">Cargando productos...</p>}
@@ -56,7 +56,7 @@ function Home() {
           <p className="text-zinc-400">No hay productos disponibles.</p>
         )}
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
           {productos
             .filter((producto) =>
               producto.tags?.some((tag) => tag.title === "Destacado")

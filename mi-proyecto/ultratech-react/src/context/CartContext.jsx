@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
@@ -21,15 +20,13 @@ export function CartProvider({ children }) {
 
   function agregarAlCarrito(producto) {
     setCarrito((actual) => {
-      const existente = actual.find(
-        (item) => item.id === producto.id
-      );
+      const existente = actual.find((item) => item.id === producto.id);
 
       if (existente) {
         return actual.map((item) =>
           item.id === producto.id
             ? { ...item, cantidad: item.cantidad + 1 }
-            : item
+            : item,
         );
       }
 
@@ -45,9 +42,7 @@ export function CartProvider({ children }) {
     if (cantidad < 1) return;
 
     setCarrito((actual) =>
-      actual.map((item) =>
-        item.id === id ? { ...item, cantidad } : item
-      )
+      actual.map((item) => (item.id === id ? { ...item, cantidad } : item)),
     );
   }
 
@@ -57,12 +52,12 @@ export function CartProvider({ children }) {
 
   const cantidadTotal = carrito.reduce(
     (total, item) => total + item.cantidad,
-    0
+    0,
   );
 
   const precioTotal = carrito.reduce(
     (total, item) => total + Number(item.price) * item.cantidad,
-    0
+    0,
   );
 
   return (
@@ -74,7 +69,7 @@ export function CartProvider({ children }) {
         cambiarCantidad,
         vaciarCarrito,
         cantidadTotal,
-        precioTotal
+        precioTotal,
       }}
     >
       {children}

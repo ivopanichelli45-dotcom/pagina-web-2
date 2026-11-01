@@ -1,16 +1,10 @@
-
 import { useEffect, useState } from "react";
+import { obtenerCategorias } from "../../services/CategoryService";
+import { obtenerTags } from "../../services/TagService";
 import {
   obtenerProductos,
   guardarProductos,
 } from "../../services/ProductService";
-
-const categorias = {
-  "1": "Procesadores",
-  "2": "Placas de video",
-  "3": "Almacenamiento",
-  "4": "Placas madre",
-};
 
 const formularioVacio = {
   title: "",
@@ -19,30 +13,41 @@ const formularioVacio = {
   category_id: "1",
   category: "Procesadores",
   picture: "",
+  tags: [],
 };
 
 function AdminProducts() {
   const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [tagsDisponibles, setTagsDisponibles] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
   const [editandoId, setEditandoId] = useState(null);
 
   const [nuevoProducto, setNuevoProducto] = useState(formularioVacio);
 
-  useEffect(() => {
-    async function cargarProductos() {
-      try {
-        const datos = await obtenerProductos();
-        setProductos(datos);
-      } catch (err) {
-        setError(err.message || "No se pudieron cargar los productos.");
-      } finally {
-        setCargando(false);
-      }
-    }
+ useEffect(() => {
+  async function cargarDatos() {
+    try {
+      const [datosProductos, datosCategorias, datosTags] =
+        await Promise.all([
+          obtenerProductos(),
+          obtenerCategorias(),
+          obtenerTags(),
+        ]);
 
-    cargarProductos();
-  }, []);
+      setProductos(datosProductos);
+      setCategorias(datosCategorias);
+      setTagsDisponibles(datosTags);
+    } catch (err) {
+      setError(err.message || "No se pudieron cargar los datos.");
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  cargarDatos();
+}, []);
 
   function manejarCambio(evento) {
     const { name, value } = evento.target;
@@ -55,11 +60,14 @@ function AdminProducts() {
 
   function manejarCategoria(evento) {
     const id = evento.target.value;
+     const categoriaSeleccionada = categorias.find(
+    (categoria) => String(categoria.id) === id
+  );
 
     setNuevoProducto((anterior) => ({
       ...anterior,
       category_id: id,
-      category: categorias[id],
+      category: categoriaSeleccionada?.title || "",
     }));
   }
 
@@ -86,6 +94,7 @@ function AdminProducts() {
       pictures: nuevoProducto.picture.trim()
         ? [nuevoProducto.picture.trim()]
         : [],
+      tags: nuevoProducto.tags,
     };
 
     let actualizados;
@@ -94,13 +103,12 @@ function AdminProducts() {
       actualizados = productos.map((existente) =>
         String(existente.id) === String(editandoId)
           ? { ...existente, ...producto }
-          : existente
+          : existente,
       );
     } else {
       const productoNuevo = {
         ...producto,
         id: Date.now(),
-        tags: [],
       };
 
       actualizados = [...productos, productoNuevo];
@@ -113,21 +121,27 @@ function AdminProducts() {
   }
 
   function empezarEdicion(producto) {
-    setEditandoId(producto.id);
+  setEditandoId(producto.id);
 
-    setNuevoProducto({
-      title: producto.title || "",
-      description: producto.description || "",
-      price: String(producto.price ?? ""),
-      category_id: String(producto.category_id ?? "1"),
-      category:
-        producto.category ||
-        categorias[String(producto.category_id ?? "1")],
-      picture:
-        producto.pictures?.[0] ||
-        producto.picture ||
-        "",
-    });
+  setNuevoProducto({
+    title: producto.title || "",
+    description: producto.description || "",
+    price: String(producto.price ?? ""),
+    category_id: String(producto.category_id ?? producto.category?.id ?? "1"),
+    category:
+      producto.category?.title ||
+      producto.category ||
+      categorias.find(
+        (categoria) =>
+          String(categoria.id) ===
+          String(producto.category_id ?? producto.category?.id ?? "1")
+      )?.title ||
+      "",
+    picture: producto.pictures?.[0] || producto.picture || "",
+    tags: (producto.tags || []).map((tag) =>
+      typeof tag === "string" ? tag : tag.title
+    ),
+  });
 
     setError("");
 
@@ -141,13 +155,13 @@ function AdminProducts() {
 
   function eliminarProducto(id) {
     const confirmar = window.confirm(
-      "¿Seguro que querés eliminar este producto?"
+      "¿Seguro que querés eliminar este producto?",
     );
 
     if (!confirmar) return;
 
     const actualizados = productos.filter(
-      (producto) => String(producto.id) !== String(id)
+      (producto) => String(producto.id) !== String(id),
     );
 
     guardarProductos(actualizados);
@@ -162,9 +176,7 @@ function AdminProducts() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10">
-      <h1 className="mb-2 text-3xl font-bold">
-        Administrar productos
-      </h1>
+      <h1 className="mb-2 text-3xl font-bold">Administrar productos</h1>
 
       <p className="mb-8 text-zinc-400">
         Creá, editá y eliminá productos de la tienda.
@@ -223,9 +235,9 @@ function AdminProducts() {
               onChange={manejarCategoria}
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 p-3"
             >
-              {Object.entries(categorias).map(([id, nombre]) => (
-                <option key={id} value={id}>
-                  {nombre}
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.id}>
+                  {categoria.title}
                 </option>
               ))}
             </select>
@@ -259,6 +271,29 @@ function AdminProducts() {
               placeholder="Características del producto"
             />
           </div>
+          <div className="sm:col-span-2">
+            <label className="mb-2 block text-sm">Tags del producto</label>
+
+            <div className="flex flex-wrap gap-4">
+              {tagsDisponibles.map((tag) => (
+                <label key={tag.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={nuevoProducto.tags.includes(tag.title)}
+                    onChange={(evento) => {
+                      setNuevoProducto((anterior) => ({
+                        ...anterior,
+                        tags: evento.target.checked
+                          ? [...anterior.tags, tag.title]
+                          : anterior.tags.filter((item) => item !== tag.title),
+                      }));
+                    }}
+                  />
+                  {tag.title}
+                </label>
+              ))}
+            </div>
+          </div>
 
           {error && (
             <p role="alert" className="sm:col-span-2 text-red-400">
@@ -271,9 +306,7 @@ function AdminProducts() {
               type="submit"
               className="rounded-lg bg-green-600 px-5 py-3 font-semibold text-white hover:bg-green-500"
             >
-              {editandoId !== null
-                ? "Guardar cambios"
-                : "Agregar producto"}
+              {editandoId !== null ? "Guardar cambios" : "Agregar producto"}
             </button>
 
             {editandoId !== null && (
@@ -351,5 +384,4 @@ function AdminProducts() {
     </main>
   );
 }
-
 export default AdminProducts;

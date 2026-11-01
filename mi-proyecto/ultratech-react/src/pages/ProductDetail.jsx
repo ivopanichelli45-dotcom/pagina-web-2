@@ -102,10 +102,19 @@ function ProductDetail() {
           <p className="mb-3 text-sm text-green-500">
             {producto.category?.title || "Hardware y tecnología"}
           </p>
-
-          <h1 className="text-3xl font-bold text-white">
-            {producto.title}
-          </h1>
+          {producto.tags?.length > 0 && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              {producto.tags.map((tag, indice) => (
+                <span
+                  key={tag.id || indice}
+                  className="rounded-full bg-zinc-800 px-3 py-1 text-sm text-green-400"
+                >
+                  {typeof tag === "object" ? tag.title : tag}
+                </span>
+              ))}
+            </div>
+          )}
+          <h1 className="text-3xl font-bold text-white">{producto.title}</h1>
 
           <p className="mt-5 text-2xl font-bold text-green-500">
             {Number(producto.price).toLocaleString("es-AR", {

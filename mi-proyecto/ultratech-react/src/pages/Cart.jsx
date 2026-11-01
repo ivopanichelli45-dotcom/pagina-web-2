@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
@@ -21,15 +20,11 @@ function Cart() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="mb-6 text-3xl font-bold">
-        Mi carrito
-      </h1>
+      <h1 className="mb-6 text-3xl font-bold">Mi carrito</h1>
 
       {carrito.length === 0 ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-          <p className="text-zinc-300">
-            Tu carrito está vacío.
-          </p>
+          <p className="text-zinc-300">Tu carrito está vacío.</p>
 
           <Link
             to="/productos"
@@ -54,9 +49,7 @@ function Cart() {
                   />
 
                   <div>
-                    <h2 className="font-semibold">
-                      {producto.title}
-                    </h2>
+                    <h2 className="font-semibold">{producto.title}</h2>
 
                     <p className="mt-2 text-green-500">
                       {formatoPrecio(producto.price)}
@@ -64,9 +57,7 @@ function Cart() {
 
                     <p className="mt-1 text-sm text-zinc-400">
                       Subtotal:{" "}
-                      {formatoPrecio(
-                        producto.price * producto.cantidad
-                      )}
+                      {formatoPrecio(producto.price * producto.cantidad)}
                     </p>
                   </div>
                 </div>
@@ -75,10 +66,7 @@ function Cart() {
                   <button
                     type="button"
                     onClick={() =>
-                      cambiarCantidad(
-                        producto.id,
-                        producto.cantidad - 1
-                      )
+                      cambiarCantidad(producto.id, producto.cantidad - 1)
                     }
                     disabled={producto.cantidad <= 1}
                     className="rounded bg-zinc-700 px-3 py-2 disabled:opacity-40"
@@ -91,10 +79,7 @@ function Cart() {
                   <button
                     type="button"
                     onClick={() =>
-                      cambiarCantidad(
-                        producto.id,
-                        producto.cantidad + 1
-                      )
+                      cambiarCantidad(producto.id, producto.cantidad + 1)
                     }
                     className="rounded bg-zinc-700 px-3 py-2"
                   >

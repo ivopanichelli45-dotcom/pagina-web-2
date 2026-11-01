@@ -6,6 +6,8 @@ function Products() {
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [orden, setOrden] = useState("nombre");
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+const [tagSeleccionado, setTagSeleccionado] = useState("");
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
@@ -22,28 +24,90 @@ function Products() {
 
     cargar();
   }, []);
+const categoriasDisponibles = [
+  ...new Set(
+    productos.map((producto) =>
+      typeof producto.category === "object"
+        ? producto.category?.title
+        : producto.category
+    ).filter(Boolean)
+  ),
+];
 
-  const productosFiltrados = productos
-    .filter((producto) =>
-      producto.title.toLowerCase().includes(busqueda.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (orden === "menor") return a.price - b.price;
-      if (orden === "mayor") return b.price - a.price;
-      return a.title.localeCompare(b.title);
-    });
+const tagsDisponibles = [
+  ...new Set(
+    productos.flatMap((producto) =>
+      (producto.tags || []).map((tag) =>
+        typeof tag === "object" ? tag.title : tag
+      )
+    ).filter(Boolean)
+  ),
+];
+const productosFiltrados = productos
+  .filter((producto) =>
+    producto.title.toLowerCase().includes(busqueda.toLowerCase())
+  )
+  .filter((producto) => {
+    const categoria =
+      typeof producto.category === "object"
+        ? producto.category?.title
+        : producto.category;
+
+    return (
+      !categoriaSeleccionada ||
+      categoria === categoriaSeleccionada
+    );
+  })
+  .filter((producto) => {
+    const tags = (producto.tags || []).map((tag) =>
+      typeof tag === "object" ? tag.title : tag
+    );
+
+    return !tagSeleccionado || tags.includes(tagSeleccionado);
+  })
+  .sort((a, b) => {
+    if (orden === "menor") return a.price - b.price;
+    if (orden === "mayor") return b.price - a.price;
+    return a.title.localeCompare(b.title);
+  });
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10">
       <h1 className="mb-6 text-3xl font-bold">Todos los productos</h1>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <input
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           placeholder="Buscar un producto..."
           className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3"
         />
+
+        <select
+          value={categoriaSeleccionada}
+          onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+          className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3"
+        >
+          <option value="">Todas las categorías</option>
+          {categoriasDisponibles.map((categoria) => (
+            <option key={categoria} value={categoria}>
+              {categoria}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={tagSeleccionado}
+          onChange={(e) => setTagSeleccionado(e.target.value)}
+          className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3"
+        >
+          <option value="">Todos los tags</option>
+          {tagsDisponibles.map((tag) => (
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
+          ))}
+        </select>
 
         <select
           value={orden}

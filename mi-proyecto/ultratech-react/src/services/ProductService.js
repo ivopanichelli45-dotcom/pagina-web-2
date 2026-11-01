@@ -1,16 +1,31 @@
-
 const CLAVE_PRODUCTOS = "ultratech-productos";
+function verificarAdministrador() {
+  const usuarioGuardado = localStorage.getItem("ultratech-usuario");
 
+  if (!usuarioGuardado) {
+    throw new Error("Debés iniciar sesión como administrador.");
+  }
+
+  let usuario;
+
+  try {
+    usuario = JSON.parse(usuarioGuardado);
+  } catch {
+    throw new Error("La sesión no es válida.");
+  }
+
+  if (usuario?.rol !== "admin") {
+    throw new Error("No tenés permisos para realizar esta operación.");
+  }
+}
 export async function obtenerProductos() {
   try {
     const guardados = localStorage.getItem(CLAVE_PRODUCTOS);
 
-    // Si ya hay productos guardados, usamos esos.
     if (guardados !== null) {
       return JSON.parse(guardados);
     }
 
-    // La primera vez, cargamos los productos del JSON.
     const respuesta = await fetch("/api-fake.json");
 
     if (!respuesta.ok) {
@@ -47,6 +62,7 @@ export async function obtenerProducto(id) {
 }
 
 export function guardarProductos(productos) {
+  verificarAdministrador();
   localStorage.setItem(
     CLAVE_PRODUCTOS,
     JSON.stringify(productos)
